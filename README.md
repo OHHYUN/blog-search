@@ -8,6 +8,8 @@ Kakao Blog 검색
 
 # 앞으로 추가해야 할 사항
 
+## Pagination 응답 값 적용
+
 ## 검색 키워드 저장 
 Spring Event를 검색 이벤트가 발생할 경우 이벤트 발행
 동시성 보장(db lock 사용) 
@@ -20,6 +22,10 @@ Infra영역에서 할지? Service에서 할지?
 ## Exception 처리
 Exception 이나 잘못된 요청값이 들어올 경우 처리
 RestControllerAdvice 사용하여 처리 
+
+## RestAPI 문서 작성 README에 추가
+
+## BUILD TEST
 
 # 이슈
 Window 환경에서 Build시 jar파일이 안나옴 ㅠㅠ 맥에서 테스트 필요 
