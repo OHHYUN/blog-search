@@ -17,5 +17,11 @@ spring:
       hibernate:
         format_sql: true
 
+app:
+  kakao:
+    rest-api-key: 3a59c84a1136c423f71d9219b71a2e72
+  naver:
+    client-id: 3a
+    client-secret: 4d
 
 
