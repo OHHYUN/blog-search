@@ -4,8 +4,8 @@
 헥사고널 아키텍처
 
 # 기능
-Kakao Blog 검색
-Pagination 응답 값 적용
+### Kakao Blog 검색
+### Pagination 응답 값 적용
 # 앞으로 추가해야 할 사항
 
 ## 검색 키워드 저장 
