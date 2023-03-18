@@ -1,7 +1,17 @@
 package com.study.blogsearch.api.dto;
 
-import java.util.List;
+import com.study.blogsearch.domain.entity.BlogSearchResult;
+import com.study.blogsearch.domain.entity.Meta;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Builder
+@AllArgsConstructor
+@Getter
 public class PaginationResponse<T> {
 
     private int currentPage;
@@ -10,11 +20,15 @@ public class PaginationResponse<T> {
     private int totalPages;
     private List<T> items;
 
-    public PaginationResponse(int currentPage, int itemsPerPage, long totalItems, List<T> items) {
-        this.currentPage = currentPage;
-        this.itemsPerPage = itemsPerPage;
-        this.totalItems = totalItems;
-        this.totalPages = (int) Math.ceil((double) totalItems / itemsPerPage);
-        this.items = items;
+    public static PaginationResponse<BlogPostResponse> from(BlogSearchResult domain) {
+        Meta metaData = domain.getMeta();
+
+        return PaginationResponse.<BlogPostResponse>builder()
+                .currentPage(metaData.getCurrentPage())
+                .itemsPerPage(metaData.getItemPerPage())
+                .totalItems(metaData.getTotalItems())
+                .totalPages((int) Math.ceil((double) metaData.getTotalItems() / metaData.getItemPerPage()))
+                .items(domain.getBlogPosts().stream().map(BlogPostResponse::from).collect(Collectors.toList()))
+                .build();
     }
 }

@@ -23,7 +23,7 @@ public class KakaoBlogSearch implements BlogSearch {
 
     @Override
     public Mono<BlogSearchResult> searchBlog(BlogSearchQuery query) {
-        return callKakaoAPI(KakaoBlogSearchRequest.from(query)).map(kakaoBlogSearchResponse -> kakaoBlogSearchResponse.toDomainEntity());
+        return callKakaoAPI(KakaoBlogSearchRequest.from(query)).map(kakaoBlogSearchResponse -> kakaoBlogSearchResponse.toDomainEntity(query.getStart()));
     }
     public Mono<KakaoBlogSearchResponse> callKakaoAPI(KakaoBlogSearchRequest request) {
         return kakaoWebClient.get()

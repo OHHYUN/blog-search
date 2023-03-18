@@ -1,6 +1,7 @@
 package com.study.blogsearch.api.controller;
 
-import com.study.blogsearch.api.dto.BlogSearchResponse;
+import com.study.blogsearch.api.dto.BlogPostResponse;
+import com.study.blogsearch.api.dto.PaginationResponse;
 import com.study.blogsearch.application.command.BlogSearchQueryCommand;
 import com.study.blogsearch.application.usecase.BlogSearchUseCase;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +20,12 @@ public class BlogSearchController {
     private final BlogSearchUseCase blogSearchUseCase;
 
     @GetMapping(value = "/blog", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<BlogSearchResponse> searchBlog(
+    public Mono<PaginationResponse<BlogPostResponse>> searchBlog(
             @RequestParam String query,
             @RequestParam(required = false, defaultValue = "RECENCY") String sort,
             @RequestParam int start
     ) {
         return blogSearchUseCase.searchBlog(BlogSearchQueryCommand.of(query, sort, start))
-                .map(blogSearchResult -> BlogSearchResponse.of(blogSearchResult, start));
+                .map(PaginationResponse::from);
     }
 }

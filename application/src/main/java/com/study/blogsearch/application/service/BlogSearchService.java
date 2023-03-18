@@ -23,6 +23,7 @@ public class BlogSearchService implements BlogSearchUseCase {
         return blogSearch.searchBlog(BlogSearchQuery.builder()
                         .query(command.getQuery())
                         .sortOrder(command.getSort())
+                        .start(command.getStart())
                         .build());
     }
 }
