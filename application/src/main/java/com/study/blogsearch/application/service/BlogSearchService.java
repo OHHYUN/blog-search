@@ -19,6 +19,7 @@ public class BlogSearchService implements BlogSearchUseCase {
 
     @Override
     public Mono<BlogSearchResult> searchBlog(BlogSearchQueryCommand command) {
+        // 검색 했다는 Event를 어떻게 태울까?
         //이곳에서 에러가 난다면 naverBlogSearch로 가게 만들어야한다!!
         return blogSearch.searchBlog(BlogSearchQuery.builder()
                         .query(command.getQuery())
