@@ -1,5 +1,6 @@
 package com.study.blogsearch.domain.entity;
 
+import com.study.blogsearch.domain.entity.vo.Meta;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

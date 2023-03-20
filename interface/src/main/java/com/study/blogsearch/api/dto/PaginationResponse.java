@@ -1,7 +1,7 @@
 package com.study.blogsearch.api.dto;
 
 import com.study.blogsearch.domain.entity.BlogSearchResult;
-import com.study.blogsearch.domain.entity.Meta;
+import com.study.blogsearch.domain.entity.vo.Meta;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

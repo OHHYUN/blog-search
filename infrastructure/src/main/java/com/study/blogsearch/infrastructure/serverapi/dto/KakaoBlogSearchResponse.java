@@ -1,7 +1,7 @@
-package com.study.blogsearch.infrastructure.dto;
+package com.study.blogsearch.infrastructure.serverapi.dto;
 
 import com.study.blogsearch.domain.entity.BlogSearchResult;
-import com.study.blogsearch.domain.entity.Meta;
+import com.study.blogsearch.domain.entity.vo.Meta;
 import com.study.blogsearch.domain.entity.vo.SearchSource;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,7 +24,7 @@ public class KakaoBlogSearchResponse {
                         .totalItems(this.meta.getPageable_count())
                         .currentPage(start)
                         .build())
-                .blogPosts(this.documents.stream().map(kakaoBlogSearchDocument -> kakaoBlogSearchDocument.toDomainEntity()).collect(Collectors.toList()))
+                .blogPosts(this.documents.stream().map(KakaoBlogSearchDocument::toDomainEntity).collect(Collectors.toList()))
                 .build();
     }
 }

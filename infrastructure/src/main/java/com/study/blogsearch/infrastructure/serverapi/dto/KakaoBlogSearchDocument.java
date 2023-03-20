@@ -1,4 +1,4 @@
-package com.study.blogsearch.infrastructure.dto;
+package com.study.blogsearch.infrastructure.serverapi.dto;
 
 import com.study.blogsearch.domain.entity.BlogPost;
 import lombok.AllArgsConstructor;
