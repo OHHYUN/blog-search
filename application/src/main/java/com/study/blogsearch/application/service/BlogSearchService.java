@@ -43,9 +43,7 @@ public class BlogSearchService implements BlogSearchUseCase {
                     .keyword(keyword)
                     .date(LocalDate.now())
                     .build();
-            SearchHistory foundHistory = repository.findSearchHistory(searchHistory);
-            foundHistory.increaseCount();
-            repository.saveSearchHistory(foundHistory);
+            repository.findAndUpdate(searchHistory);
             return null;
         });
     }

@@ -6,10 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface SearchHistoryRepository {
-
-    SearchHistory saveSearchHistory(SearchHistory searchHistory);
-
-    SearchHistory findSearchHistory(SearchHistory searchHistory);
+    SearchHistory findAndUpdate(SearchHistory searchHistory);
     List<SearchHistory> findTop10Keyword(LocalDate date);
 
 }

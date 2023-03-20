@@ -11,6 +11,5 @@ import lombok.Getter;
 public class BlogSearchQuery {
     private String query; // 검색어
     private SortOrder sortOrder; // 조회 순서 (정확도순, 최신순)
-
     private int start; //검색 시작 페이지
 }

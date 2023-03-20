@@ -8,8 +8,10 @@ import com.study.blogsearch.infrastructure.persistence.repository.SearchHistoryJ
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -19,24 +21,25 @@ public class SearchHistoryAdapter implements SearchHistoryRepository {
     private final SearchHistoryJpaRepository repository;
 
     @Override
-    public SearchHistory saveSearchHistory(SearchHistory searchHistory) {
-        return repository.save(SearchHistoryJpaEntity.fromDomainEntity(searchHistory))
-                .toDomainEntity();
-    }
-
-    @Override
-    public SearchHistory findSearchHistory(SearchHistory searchHistory) {
+    @Transactional
+    public SearchHistory findAndUpdate(SearchHistory searchHistory) {
         KeywordDateKey id = new KeywordDateKey(searchHistory.getKeyword(), searchHistory.getDate());
-        return repository.findById(id)
-                .orElse(SearchHistoryJpaEntity.builder()
-                        .id(id)
-                        .build())
-                .toDomainEntity();
+        Optional<SearchHistoryJpaEntity> entity = repository.findByIdWithLock(id);
+        if(entity.isPresent()) {
+            SearchHistoryJpaEntity searchHistoryJpaEntity = entity.get();
+            searchHistoryJpaEntity.increaseCount();
+            SearchHistoryJpaEntity updatedEntity = repository.save(searchHistoryJpaEntity);
+            return updatedEntity.toDomainEntity();
+        }
+        SearchHistoryJpaEntity newEntity = SearchHistoryJpaEntity.builder()
+                .id(id)
+                .build();
+        return repository.save(newEntity).toDomainEntity();
     }
 
     @Override
     public List<SearchHistory> findTop10Keyword(LocalDate date) {
-        return repository.findTop10KeywordByDate(date).stream()
+        return repository.findTop10ByIdDateOrderByCountDesc(date).stream()
                 .map(SearchHistoryJpaEntity::toDomainEntity).collect(Collectors.toList());
     }
 }

@@ -24,11 +24,15 @@ public class SearchHistoryJpaEntity {
 
     @Column(name = "search_count", nullable = false)
     @Builder.Default
-    private Long count = 0L;
+    private Long count = 1L;
 
     @Column(name = "last_updated")
     @Builder.Default
     private LocalDateTime lastUpdated = LocalDateTime.now();
+
+    public void increaseCount() {
+        this.count++;
+    }
 
     public static SearchHistoryJpaEntity fromDomainEntity(SearchHistory searchHistory) {
         KeywordDateKey keywordDateKey = new KeywordDateKey(searchHistory.getKeyword(), searchHistory.getDate());
