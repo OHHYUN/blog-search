@@ -26,7 +26,9 @@ RestControllerAdvice 사용하여 처리
 ## BUILD TEST
 
 # 이슈
-Window 환경에서 Build시 jar파일이 안나옴 ㅠㅠ 맥에서 테스트 필요 
+Window 환경에서 Build시 jar파일이 안나옴 ㅠㅠ 맥에서 테스트 필요
+
+제약조건이 JPA 이기 때문에 R2dbc 사용할 수 없음 추후에 확장 가능성을 위해 webflux를 게속 사용하는것이 맞을까?
 
 # 궁금증
 각 계층 이동 시 객체 변환을 하기 때문에 이것 때문에 성능이나 문제가 생길까? 
