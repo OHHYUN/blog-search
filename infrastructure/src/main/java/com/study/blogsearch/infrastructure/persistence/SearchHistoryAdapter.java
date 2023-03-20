@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -35,6 +36,7 @@ public class SearchHistoryAdapter implements SearchHistoryRepository {
 
     @Override
     public List<SearchHistory> findTop10Keyword(LocalDate date) {
-        return null;
+        return repository.findTop10KeywordByDate(date).stream()
+                .map(SearchHistoryJpaEntity::toDomainEntity).collect(Collectors.toList());
     }
 }

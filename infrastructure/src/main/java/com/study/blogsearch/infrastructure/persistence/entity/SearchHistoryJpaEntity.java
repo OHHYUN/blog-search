@@ -24,7 +24,7 @@ public class SearchHistoryJpaEntity {
 
     @Column(name = "search_count", nullable = false)
     @Builder.Default
-    private Long count = 1L;
+    private Long count = 0L;
 
     @Column(name = "last_updated")
     @Builder.Default
