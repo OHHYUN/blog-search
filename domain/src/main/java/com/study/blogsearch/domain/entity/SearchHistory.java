@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,9 +17,5 @@ public class SearchHistory {
 
     @Builder.Default
     private Long count = 0L;
-
-    public void increaseCount() {
-        this.count++;
-    }
 
 }

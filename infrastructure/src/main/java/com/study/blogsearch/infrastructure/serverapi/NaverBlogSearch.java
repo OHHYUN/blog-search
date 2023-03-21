@@ -5,8 +5,8 @@ import com.study.blogsearch.domain.exception.BlogSearchException;
 import com.study.blogsearch.domain.exception.errorcode.BlogSearchErrorCode;
 import com.study.blogsearch.domain.extapi.BlogSearch;
 import com.study.blogsearch.domain.extapi.command.BlogSearchQuery;
-import com.study.blogsearch.infrastructure.serverapi.dto.KakaoBlogSearchRequest;
-import com.study.blogsearch.infrastructure.serverapi.dto.KakaoBlogSearchResponse;
+import com.study.blogsearch.infrastructure.serverapi.dto.NaverBlogSearchRequest;
+import com.study.blogsearch.infrastructure.serverapi.dto.NaverBlogSearchResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -16,24 +16,27 @@ import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 @Component
-public class KakaoBlogSearch implements BlogSearch {
+public class NaverBlogSearch implements BlogSearch {
 
-    private final WebClient kakaoWebClient;
-
+    private final WebClient naverWebClient;
     @Override
     public Mono<BlogSearchResult> searchBlog(BlogSearchQuery query) {
-        return callKakaoAPI(KakaoBlogSearchRequest.from(query)).map(kakaoBlogSearchResponse -> kakaoBlogSearchResponse.toDomainEntity(query.getStart()));
+        NaverBlogSearchRequest naverBlogSearchRequest = NaverBlogSearchRequest.from(query);
+        return callNaverAPI(naverBlogSearchRequest).map(NaverBlogSearchResponse::toDomainEntity);
     }
-    public Mono<KakaoBlogSearchResponse> callKakaoAPI(KakaoBlogSearchRequest request) {
-        return kakaoWebClient.get()
+
+    public Mono<NaverBlogSearchResponse> callNaverAPI(NaverBlogSearchRequest request) {
+        return naverWebClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .path("v2/search/blog")
+                        .path("/v1/search/blog.json")
                         .queryParam("query", request.getQuery())
+                        .queryParam("display", request.getDisplay())
+                        .queryParam("start", request.getStart())
                         .queryParam("sort", request.getSort())
                         .build())
                 .retrieve()
-                .onStatus(HttpStatus::isError, clientResponse -> Mono.error(new BlogSearchException(BlogSearchErrorCode.KAKAO_BLOG_SERVER_ERROR)))
-                .bodyToMono(KakaoBlogSearchResponse.class)
+                .onStatus(HttpStatus::isError, clientResponse -> Mono.error(new BlogSearchException(BlogSearchErrorCode.NAVER_BLOG_SERVER_ERROR)))
+                .bodyToMono(NaverBlogSearchResponse.class)
                 .onErrorMap(WebClientResponseException.class, e -> new BlogSearchException(BlogSearchErrorCode.JSON_CONVERT_ERROR))
                 .retry(1);
     }

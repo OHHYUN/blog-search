@@ -14,6 +14,7 @@ public class BlogPost {
     private String postContent;
     private String postUrl;
     private String blogName;
-    private String postThumbnail;
+    @Builder.Default
+    private String postThumbnail = "";
     private LocalDateTime postDatetime;
 }

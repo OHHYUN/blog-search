@@ -1,5 +1,7 @@
 package com.study.blogsearch.domain.entity.vo;
 
+import com.study.blogsearch.domain.exception.BlogSearchException;
+import com.study.blogsearch.domain.exception.errorcode.BlogSearchErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +22,7 @@ public class Meta {
             case NAVER:
                 return 20;
             default:
-                throw new IllegalArgumentException("일치하는 갯수가 없어용");
+                throw new BlogSearchException(BlogSearchErrorCode.INVALID_SEARCH_SOURCE);
         }
     }
 

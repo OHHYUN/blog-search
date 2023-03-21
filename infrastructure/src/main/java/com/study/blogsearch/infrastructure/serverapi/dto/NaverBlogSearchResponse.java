@@ -11,20 +11,25 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-@Getter
 @NoArgsConstructor
-public class KakaoBlogSearchResponse {
-    private KakaoBlogSearchMeta meta;
-    private List<KakaoBlogSearchDocument> documents;
+@Getter
+public class NaverBlogSearchResponse {
 
-    public BlogSearchResult toDomainEntity(int start) {
+    private String lastBuildDate;
+    private int total;
+    private int start;
+    private int display;
+
+    private List<NaverBlogSearchItem> items;
+
+    public BlogSearchResult toDomainEntity() {
         return BlogSearchResult.builder()
                 .meta(Meta.builder()
-                        .searchSource(SearchSource.KAKAO)
-                        .totalItems(this.meta.getPageableCount())
-                        .currentPage(start)
+                        .searchSource(SearchSource.NAVER)
+                        .totalItems(this.total)
+                        .currentPage(this.start)
                         .build())
-                .blogPosts(this.documents.stream().map(KakaoBlogSearchDocument::toDomainEntity).collect(Collectors.toList()))
+                .blogPosts(this.items.stream().map(NaverBlogSearchItem::toDomainEntity).collect(Collectors.toList()))
                 .build();
     }
 }
