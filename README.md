@@ -3,21 +3,13 @@ hexagonal architecture
 
 # 기능
 ### Kakao Blog 검색
+실패 시 Naver Blog 검색
 ### 검색 키워드 저장
 동시성 보장(db lock 사용)
 ### 인기 검색어 목록
 ### Pagination 응답 값 적용
+### Exception 처리
 # 앞으로 추가해야 할 사항
-
- 
-
-## Naver Blog 검색
-Kakao Blog 검색 실패 시 처리 
-Infra영역에서 할지? Service에서 할지?
-
-## Exception 처리
-Exception 이나 잘못된 요청값이 들어올 경우 처리
-RestControllerAdvice 사용하여 처리 
 
 ## RestAPI 문서 작성 README 추가
 
@@ -26,7 +18,7 @@ RestControllerAdvice 사용하여 처리
 ## BUILD TEST
 
 # 이슈
-
+GlobalException에 errorcode 필드를 넣은 것 때문에 serializable 하라고 함..하지만 문제가 계속 발생!!
 
 # 궁금증
 각 계층 이동 시 객체 변환을 하기 때문에 이것 때문에 성능이나 문제가 생길까?
