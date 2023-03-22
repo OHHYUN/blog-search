@@ -3,14 +3,12 @@ package com.study.blogsearch.infrastructure.persistence;
 import com.study.blogsearch.domain.entity.SearchHistory;
 import com.study.blogsearch.domain.exception.errorcode.SearchHistoryErrorCode;
 import com.study.blogsearch.domain.repository.SearchHistoryRepository;
-import com.study.blogsearch.infrastructure.persistence.entity.KeywordDateKey;
 import com.study.blogsearch.infrastructure.persistence.entity.SearchHistoryJpaEntity;
 import com.study.blogsearch.infrastructure.persistence.repository.SearchHistoryJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,24 +27,24 @@ public class SearchHistoryAdapter implements SearchHistoryRepository {
         return handleDbExceptions(() -> performFindAndUpdate(searchHistory), SearchHistoryErrorCode.DATA_UPDATE_ERROR);
     }
 
-    private SearchHistory performFindAndUpdate(SearchHistory searchHistory) {
-        KeywordDateKey id = new KeywordDateKey(searchHistory.getKeyword(), searchHistory.getDate());
-        Optional<SearchHistoryJpaEntity> entity = repository.findByIdWithLock(id);
-        if(entity.isPresent()) {
-            SearchHistoryJpaEntity searchHistoryJpaEntity = entity.get();
-            searchHistoryJpaEntity.increaseCount();
-            SearchHistoryJpaEntity updatedEntity = repository.save(searchHistoryJpaEntity);
-            return updatedEntity.toDomainEntity();
+    public SearchHistory performFindAndUpdate(SearchHistory searchHistory) {
+        Optional<SearchHistoryJpaEntity> foundEntity = repository.findByIdWithLock(searchHistory.getKeyword());
+
+        SearchHistoryJpaEntity entity;
+        if(foundEntity.isPresent()) {
+            entity = foundEntity.get();
+            entity.increaseCount();
+        } else {
+            entity = SearchHistoryJpaEntity.builder()
+                    .id(searchHistory.getKeyword())
+                    .build();
         }
-        SearchHistoryJpaEntity newEntity = SearchHistoryJpaEntity.builder()
-                .id(id)
-                .build();
-        return repository.save(newEntity).toDomainEntity();
+        return repository.saveAndFlush(entity).toDomainEntity();
     }
 
     @Override
-    public List<SearchHistory> findTop10Keyword(LocalDate date) {
-        return handleDbExceptions(() -> repository.findTop10ByIdDateOrderByCountDesc(date).stream()
+    public List<SearchHistory> findTop10Keyword() {
+        return handleDbExceptions(() -> repository.findTop10ByOrderByCountDesc().stream()
                 .map(SearchHistoryJpaEntity::toDomainEntity).collect(Collectors.toList()), SearchHistoryErrorCode.DATA_FETCH_ERROR);
     }
 }

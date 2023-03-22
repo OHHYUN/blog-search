@@ -17,8 +17,6 @@ import java.time.LocalDate;
 @EqualsAndHashCode
 public class KeywordDateKey implements Serializable {
 
-    @Column(name = "keyword")
-    private String keyword;
 
     @Column(name = "date")
     private LocalDate date;

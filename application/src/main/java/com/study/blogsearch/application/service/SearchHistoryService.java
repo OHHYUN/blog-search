@@ -6,7 +6,6 @@ import com.study.blogsearch.domain.repository.SearchHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -16,7 +15,7 @@ public class SearchHistoryService implements SearchHistoryUsecase {
     private final SearchHistoryRepository repository;
 
     @Override
-    public List<SearchHistory> findPopularSearch(LocalDate date) {
-        return repository.findTop10Keyword(date);
+    public List<SearchHistory> findPopularSearch() {
+        return repository.findTop10Keyword();
     }
 }

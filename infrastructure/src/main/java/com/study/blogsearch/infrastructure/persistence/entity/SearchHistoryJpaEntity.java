@@ -1,15 +1,9 @@
 package com.study.blogsearch.infrastructure.persistence.entity;
 
 import com.study.blogsearch.domain.entity.SearchHistory;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,9 +12,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
+@EqualsAndHashCode(of = "id")
 public class SearchHistoryJpaEntity {
-    @EmbeddedId
-    private KeywordDateKey id;
+
+    @Column(name = "keyword")
+    @Id
+    private String id;
 
     @Column(name = "search_count", nullable = false)
     @Builder.Default
@@ -35,9 +33,8 @@ public class SearchHistoryJpaEntity {
     }
 
     public static SearchHistoryJpaEntity fromDomainEntity(SearchHistory searchHistory) {
-        KeywordDateKey keywordDateKey = new KeywordDateKey(searchHistory.getKeyword(), searchHistory.getDate());
         return SearchHistoryJpaEntity.builder()
-                .id(keywordDateKey)
+                .id(searchHistory.getKeyword())
                 .count(searchHistory.getCount())
                 .lastUpdated(LocalDateTime.now())
                 .build();
@@ -45,8 +42,7 @@ public class SearchHistoryJpaEntity {
 
     public SearchHistory toDomainEntity() {
         return SearchHistory.builder()
-                .keyword(this.id.getKeyword())
-                .date(this.id.getDate())
+                .keyword(this.id)
                 .count(this.count)
                 .build();
     }
