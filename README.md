@@ -4,6 +4,14 @@
 ### Github URL 
 https://github.com/OHHYUN/blog-search
 
+### 빌드 경로
+Gradle build 시 
+interface/build/libs/blog-search.jar 파일로 빌드가 됨
+```
+java -jar ./interface/build/libs/blog-search.jar
+```
+
+
 # API 명세서
 
 ## 블로그 검색 API

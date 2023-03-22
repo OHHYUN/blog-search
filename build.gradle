@@ -68,13 +68,9 @@ project(':infrastructure') {
 }
 
 project(':interface') {
-    jar {
-        enabled = false
-    }
-    bootJar {
-        enabled = true
-        archiveFileName = "blog-search.jar"
-    }
+    bootJar.enabled = true
+    bootJar.archiveFileName = "blog-search.jar"
+    jar.enabled = false
 
     dependencies {
         implementation project(':domain')
