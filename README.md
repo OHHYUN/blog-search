@@ -1,29 +1,110 @@
+
+# 카카오뱅크 과제
+
+### Github URL 
+https://github.com/OHHYUN/blog-search
+
+# API 명세서
+
+## 블로그 검색 API
+
+### Request
+
+|Name|Type| Description                                        |
+|------|---|----------------------------------------------------|
+|query|String| 검색어 (필수)                                           |
+|start|Integer| 검색 시작 위치 (선택, 기본값: 1)                              |
+|sort|String| 정렬 방식 (선택, 지원되는 값: RECENCY, ACCURACY 기본값: RECENCY) |
+
+### Response
+
+|Name|Type| Description                                        |
+|------|---|----------------------------------------------------|
+|Name|Type| Description|
+|start|Integer| 검색 시작 위치 (선택, 기본값: 1)                              |
+|sort|String| 정렬 방식 (선택, 지원되는 값: RECENCY, ACCURACY 기본값: RECENCY) |
+|currentPage	|Integer|	현재 페이지 번호|
+|itemsPerPage	|Integer|	페이지 당 아이템 수|
+|totalItems	|Integer|	전체 검색 결과 수|
+|totalPages	|Integer|	전체 페이지 수|
+|items	|Array|	검색 결과 목록|
+|items.title|	String|	블로그 포스트 제목|
+|items.content|	String|	블로그 포스트 내용 요약|
+|items.url|	String|	블로그 포스트 URL|
+|items.blogName|	String|	블로그 이름|
+|items.postThumbnail|	String|	블로그 포스트 썸네일 이미지 URL|
+|items.postDateTime|	String|	블로그 포스트 작성 일시 (ISO 8601 형식)|
+
+
+### sample request
+```
+curl --location --request GET 'localhost:8080/search/blog?query=돼지&start=1&sort=RECENCY'
+```
+
+### sample response
+
+```
+{
+    "currentPage": 1,
+    "itemsPerPage": 20,
+    "totalItems": 12989307,
+    "totalPages": 649466,
+    "items": [
+        {
+            "title": "~3/12",
+            "content": "모인목적 : 더글로리 야물게 즐기기 ( 속내 : <b>돼지</b>파티 ) 하 치떡 진짜 먹고싶어 뒤지는줄 ~ ! 근데 교촌... 딸기도줘서 진짜 감동함  입가심으로 아이스크림까지 제대로 <b>돼지</b>파티 즐겨줌 굿 ~ 아들들아... ",
+            "url": "blog.naver.com/llimmy",
+            "blogName": "full of joy",
+            "postThumbnail": "",
+            "postDateTime": "2023-03-22T00:00:00"
+        }
+    ]
+}
+```
+
+## 인기 검색어 API
+
+### Request
+
+|Name|Type| Description |
+|------|---|------------|
+|없음|||
+
+### Response
+
+|Name|Type| Description |
+|------|---|------------|
+|rank|	Integer|인기 검색어 순위|
+|keyword|String|검색어|
+|count|Integer|검색 횟수|
+
+### sample request
+```
+curl --location --request GET 'localhost:8080/search/popular-keywords'
+```
+
+### sample response
+
+```
+[
+    {
+        "rank": 1,
+        "keyword": "돼지",
+        "count": 1
+    }
+]
+```
+
 # blog-search
-hexagonal architecture 
+hexagonal architecture
 
 # 기능
 ### Kakao Blog 검색
-실패 시 Naver Blog 검색
+### 실패 시 Naver Blog 검색
 ### 검색 키워드 저장
-동시성 보장(db lock 사용)
 ### 인기 검색어 목록
 ### Pagination 응답 값 적용
 ### Exception 처리
-# 앞으로 추가해야 할 사항
-
-## RestAPI 문서 작성 README 추가
-
-## Test 코드 작성
-
-## BUILD TEST
-
 # 이슈
-GlobalException에 errorcode 필드를 넣은 것 때문에 serializable 하라고 함..하지만 문제가 계속 발생!!
-
-# 궁금증
-각 계층 이동 시 객체 변환을 하기 때문에 이것 때문에 성능이나 문제가 생길까?
-
-repository 인터페이스를 분리를 해야할까..?
-
-제약조건이 JPA 이기 때문에 R2dbc 사용할 수 없음 추후에 확장 가능성을 위해 webflux를 게속 사용하는것이 맞을까?
--> WebFlux + JDBC는 성능이 매우 안좋음..  변경 
+동시성 처리 문제가 제대로 작동하지 않음
+로그로 하나씩 쌓고 집계로 불러오는 방법도 있지만 집계 과정에서 속도가 오래걸릴 것 같음
