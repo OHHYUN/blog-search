@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/search")
@@ -20,12 +19,12 @@ public class BlogSearchController {
     private final BlogSearchUseCase blogSearchUseCase;
 
     @GetMapping(value = "/blog", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<PaginationResponse<BlogPostResponse>> searchBlog(
+    public PaginationResponse<BlogPostResponse> searchBlog(
             @RequestParam String query,
             @RequestParam(required = false, defaultValue = "RECENCY") String sort,
             @RequestParam int start
     ) {
-        return blogSearchUseCase.searchBlog(BlogSearchQueryCommand.of(query, sort, start))
-                .map(PaginationResponse::from);
+        final var blogSearchResult = blogSearchUseCase.searchBlog(BlogSearchQueryCommand.of(query, sort, start));
+        return PaginationResponse.fromBlogSearchResult(blogSearchResult);
     }
 }

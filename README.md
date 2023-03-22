@@ -26,3 +26,4 @@ GlobalException에 errorcode 필드를 넣은 것 때문에 serializable 하라�
 repository 인터페이스를 분리를 해야할까..?
 
 제약조건이 JPA 이기 때문에 R2dbc 사용할 수 없음 추후에 확장 가능성을 위해 webflux를 게속 사용하는것이 맞을까?
+-> WebFlux + JDBC는 성능이 매우 안좋음..  변경 

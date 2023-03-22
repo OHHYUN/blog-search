@@ -1,10 +1,7 @@
 package com.study.blogsearch.infrastructure.serverapi;
 
-import com.study.blogsearch.domain.entity.BlogSearchResult;
 import com.study.blogsearch.domain.exception.BlogSearchException;
 import com.study.blogsearch.domain.exception.errorcode.BlogSearchErrorCode;
-import com.study.blogsearch.domain.extapi.BlogSearch;
-import com.study.blogsearch.domain.extapi.command.BlogSearchQuery;
 import com.study.blogsearch.infrastructure.serverapi.dto.KakaoBlogSearchRequest;
 import com.study.blogsearch.infrastructure.serverapi.dto.KakaoBlogSearchResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,14 +13,10 @@ import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 @Component
-public class KakaoBlogSearch implements BlogSearch {
+public class KakaoBlogSearch {
 
     private final WebClient kakaoWebClient;
 
-    @Override
-    public Mono<BlogSearchResult> searchBlog(BlogSearchQuery query) {
-        return callKakaoAPI(KakaoBlogSearchRequest.from(query)).map(kakaoBlogSearchResponse -> kakaoBlogSearchResponse.toDomainEntity(query.getStart()));
-    }
     public Mono<KakaoBlogSearchResponse> callKakaoAPI(KakaoBlogSearchRequest request) {
         return kakaoWebClient.get()
                 .uri(uriBuilder -> uriBuilder

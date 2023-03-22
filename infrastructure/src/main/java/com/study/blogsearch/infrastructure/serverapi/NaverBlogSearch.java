@@ -1,10 +1,7 @@
 package com.study.blogsearch.infrastructure.serverapi;
 
-import com.study.blogsearch.domain.entity.BlogSearchResult;
 import com.study.blogsearch.domain.exception.BlogSearchException;
 import com.study.blogsearch.domain.exception.errorcode.BlogSearchErrorCode;
-import com.study.blogsearch.domain.extapi.BlogSearch;
-import com.study.blogsearch.domain.extapi.command.BlogSearchQuery;
 import com.study.blogsearch.infrastructure.serverapi.dto.NaverBlogSearchRequest;
 import com.study.blogsearch.infrastructure.serverapi.dto.NaverBlogSearchResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,14 +13,9 @@ import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 @Component
-public class NaverBlogSearch implements BlogSearch {
+public class NaverBlogSearch {
 
     private final WebClient naverWebClient;
-    @Override
-    public Mono<BlogSearchResult> searchBlog(BlogSearchQuery query) {
-        NaverBlogSearchRequest naverBlogSearchRequest = NaverBlogSearchRequest.from(query);
-        return callNaverAPI(naverBlogSearchRequest).map(NaverBlogSearchResponse::toDomainEntity);
-    }
 
     public Mono<NaverBlogSearchResponse> callNaverAPI(NaverBlogSearchRequest request) {
         return naverWebClient.get()

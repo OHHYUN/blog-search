@@ -1,6 +1,7 @@
 package com.study.blogsearch.infrastructure.persistence;
 
 import com.study.blogsearch.domain.entity.SearchHistory;
+import com.study.blogsearch.domain.exception.errorcode.SearchHistoryErrorCode;
 import com.study.blogsearch.domain.repository.SearchHistoryRepository;
 import com.study.blogsearch.infrastructure.persistence.entity.KeywordDateKey;
 import com.study.blogsearch.infrastructure.persistence.entity.SearchHistoryJpaEntity;
@@ -14,6 +15,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.study.blogsearch.infrastructure.persistence.util.ExceptionUtils.handleDbExceptions;
+
 @Component
 @RequiredArgsConstructor
 public class SearchHistoryAdapter implements SearchHistoryRepository {
@@ -23,6 +26,10 @@ public class SearchHistoryAdapter implements SearchHistoryRepository {
     @Override
     @Transactional
     public SearchHistory findAndUpdate(SearchHistory searchHistory) {
+        return handleDbExceptions(() -> performFindAndUpdate(searchHistory), SearchHistoryErrorCode.DATA_UPDATE_ERROR);
+    }
+
+    private SearchHistory performFindAndUpdate(SearchHistory searchHistory) {
         KeywordDateKey id = new KeywordDateKey(searchHistory.getKeyword(), searchHistory.getDate());
         Optional<SearchHistoryJpaEntity> entity = repository.findByIdWithLock(id);
         if(entity.isPresent()) {
@@ -39,7 +46,7 @@ public class SearchHistoryAdapter implements SearchHistoryRepository {
 
     @Override
     public List<SearchHistory> findTop10Keyword(LocalDate date) {
-        return repository.findTop10ByIdDateOrderByCountDesc(date).stream()
-                .map(SearchHistoryJpaEntity::toDomainEntity).collect(Collectors.toList());
+        return handleDbExceptions(() -> repository.findTop10ByIdDateOrderByCountDesc(date).stream()
+                .map(SearchHistoryJpaEntity::toDomainEntity).collect(Collectors.toList()), SearchHistoryErrorCode.DATA_FETCH_ERROR);
     }
 }

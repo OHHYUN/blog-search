@@ -20,7 +20,7 @@ public class PaginationResponse<T> {
     private int totalPages;
     private List<T> items;
 
-    public static PaginationResponse<BlogPostResponse> from(BlogSearchResult domain) {
+    public static PaginationResponse<BlogPostResponse> fromBlogSearchResult(BlogSearchResult domain) {
         Meta metaData = domain.getMeta();
 
         return PaginationResponse.<BlogPostResponse>builder()

@@ -20,9 +20,9 @@ spring:
 
 app:
   kakao:
-    rest-api-key: 3a59c84a1136c423f71d9219b71a2e72
+    rest-api-key: 3a59c84a1136c423f71d9219b71a2e723
   naver:
-    client-id: 37mrwnrKLIokuSFSk12O
+    client-id: 37mrwnrKLIokuSFSk12O1
     client-secret: f_UHA5el7c
 
 

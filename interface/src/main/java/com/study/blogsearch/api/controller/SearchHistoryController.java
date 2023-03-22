@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @RestController
 @RequestMapping("/history")
@@ -19,14 +21,15 @@ public class SearchHistoryController {
     private final SearchHistoryUsecase searchHistoryUsecase;
 
     @GetMapping("/popular")
-    public Flux<SearchHistoryResponse> popularHistory(@RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}") LocalDate date) {
-        return searchHistoryUsecase.findPopularSearch(date)
-                .index()
-                .map(tuple -> SearchHistoryResponse.builder()
-                        .rank((int) (tuple.getT1() + 1))
-                        .keyword(tuple.getT2().getKeyword())
-                        .count(tuple.getT2().getCount())
-                        .build());
+    public List<SearchHistoryResponse> popularHistory(@RequestParam(required = false, defaultValue = "#{T(java.time.LocalDate).now()}") LocalDate date) {
+        final var popularSearchList = searchHistoryUsecase.findPopularSearch(date);
+        return IntStream.range(0, popularSearchList.size())
+                .mapToObj(i -> SearchHistoryResponse.builder()
+                        .rank(i + 1)
+                        .keyword(popularSearchList.get(i).getKeyword())
+                        .count(popularSearchList.get(i).getCount())
+                        .build())
+                .collect(Collectors.toList());
     }
 }
 
