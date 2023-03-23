@@ -28,7 +28,6 @@ java -jar ./interface/build/libs/blog-search.jar
 
 |Name|Type| Description                                        |
 |------|---|----------------------------------------------------|
-|Name|Type| Description|
 |start|Integer| 검색 시작 위치 (선택, 기본값: 1)                              |
 |sort|String| 정렬 방식 (선택, 지원되는 값: RECENCY, ACCURACY 기본값: RECENCY) |
 |currentPage	|Integer|	현재 페이지 번호|
